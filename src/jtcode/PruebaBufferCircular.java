@@ -5,7 +5,7 @@ class Productor extends Thread{
 	
 	public Productor(IBufer elbufer){
 		super("Productor");
-		compartido=elbufer;
+		this.compartido=elbufer;
 	}
 	
 	@Override
@@ -27,7 +27,7 @@ private IBufer compartido;
 	
 	public Consumidor(IBufer elbufer){
 		super("Consumidor");
-		compartido=elbufer;
+		this.compartido=elbufer;
 	}
 	
 	@Override
@@ -36,7 +36,6 @@ private IBufer compartido;
 		for(int i=0;i< 10;i++){
 			try {
 				Thread.sleep((int)Math.random()*3001);
-				compartido.escribir(i);
 				suma+=compartido.leer();
 				
 			} catch (InterruptedException e) {e.printStackTrace();}
@@ -53,12 +52,15 @@ public class PruebaBufferCircular {
 		
 		Productor prod=new Productor(elBuffer);
 		Consumidor consu= new Consumidor(elBuffer);
+		Consumidor consu2= new Consumidor(elBuffer);
 		
 		prod.start();
 		consu.start();
+		consu2.start();
 		
 		try {
 			consu.join();prod.join();
+			consu2.join();
 			
 		} catch (InterruptedException e) {e.printStackTrace();}
 		
